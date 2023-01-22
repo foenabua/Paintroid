@@ -575,6 +575,7 @@ class MainActivity : AppCompatActivity(), MainView, CommandListener {
         topBar.undoButton.setOnClickListener { presenterMain.undoClicked() }
         topBar.redoButton.setOnClickListener { presenterMain.redoClicked() }
         topBar.checkmarkButton.setOnClickListener {
+            idlingResource.increment()
             if (toolReference.tool?.toolType?.name.equals(ToolType.TRANSFORM.name)) {
                 (toolReference.tool as TransformTool).checkMarkClicked = true
                 val tool = toolReference.tool as BaseToolWithShape?
@@ -586,6 +587,7 @@ class MainActivity : AppCompatActivity(), MainView, CommandListener {
                 val tool = toolReference.tool as BaseToolWithShape?
                 tool?.onClickOnButton()
             }
+            idlingResource.decrement()
         }
         topBar.plusButton.setOnClickListener {
             val tool = toolReference.tool as LineTool

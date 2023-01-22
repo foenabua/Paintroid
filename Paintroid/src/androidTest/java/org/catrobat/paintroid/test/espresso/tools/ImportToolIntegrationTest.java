@@ -24,16 +24,19 @@ import org.catrobat.paintroid.R;
 import org.catrobat.paintroid.test.espresso.rtl.util.RtlActivityTestRule;
 import org.catrobat.paintroid.test.utils.ScreenshotOnFailRule;
 import org.catrobat.paintroid.tools.ToolType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
-
 import static org.catrobat.paintroid.test.espresso.util.wrappers.ToolBarViewInteraction.onToolBarView;
 import static org.junit.Assert.assertEquals;
+
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.idling.CountingIdlingResource;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -53,12 +56,20 @@ public class ImportToolIntegrationTest {
 	public ScreenshotOnFailRule screenshotOnFailRule = new ScreenshotOnFailRule();
 
 	private MainActivity mainActivity;
+	private CountingIdlingResource idlingResource;
 
 	@Before
 	public void setUp() {
 		mainActivity = launchActivityRule.getActivity();
 		onToolBarView()
 				.performSelectTool(ToolType.IMPORTPNG);
+		idlingResource = mainActivity.getIdlingResource();
+		IdlingRegistry.getInstance().register(idlingResource);
+	}
+
+	@After
+	public void tearDown() {
+		androidx.test.espresso.IdlingRegistry.getInstance().unregister(idlingResource);
 	}
 
 	@Test

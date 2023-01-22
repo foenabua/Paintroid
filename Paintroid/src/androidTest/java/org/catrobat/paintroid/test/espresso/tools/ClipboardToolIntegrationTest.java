@@ -37,13 +37,11 @@ import org.catrobat.paintroid.tools.drawable.DrawableStyle;
 import org.catrobat.paintroid.tools.implementation.BaseToolWithRectangleShape;
 import org.catrobat.paintroid.tools.implementation.ClipboardTool;
 import org.catrobat.paintroid.ui.Perspective;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
 import static org.catrobat.paintroid.test.espresso.util.UiInteractions.touchAt;
 import static org.catrobat.paintroid.test.espresso.util.wrappers.DrawingSurfaceInteraction.onDrawingSurfaceView;
@@ -55,6 +53,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.idling.CountingIdlingResource;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 @RunWith(AndroidJUnit4.class)
 public class ClipboardToolIntegrationTest {
@@ -71,6 +74,7 @@ public class ClipboardToolIntegrationTest {
 	private Perspective perspective;
 	private ToolReference toolReference;
 	private MainActivity mainActivity;
+	private CountingIdlingResource idlingResource;
 
 	@Before
 	public void setUp() {
@@ -80,6 +84,13 @@ public class ClipboardToolIntegrationTest {
 		workspace = mainActivity.workspace;
 		perspective = mainActivity.perspective;
 		toolReference = mainActivity.toolReference;
+		idlingResource = mainActivity.getIdlingResource();
+		androidx.test.espresso.IdlingRegistry.getInstance().register(idlingResource);
+	}
+
+	@After
+	public void tearDown() {
+		IdlingRegistry.getInstance().unregister(idlingResource);
 	}
 
 	@Test
