@@ -1630,7 +1630,7 @@ class MainActivityPresenterTest {
     fun testShowScaleDialogWhenNotEnoughMemory() {
         val bmr = BitmapReturnValue(
             workspace!!.layerModel.layers,
-            workspace.layerModel.getBitmapOfAllLayers(),
+            bitmap,
             true
         )
         presenter!!.onLoadImagePostExecute(LOAD_IMAGE_IMPORT_PNG, null, bmr)

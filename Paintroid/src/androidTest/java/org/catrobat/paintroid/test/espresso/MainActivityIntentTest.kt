@@ -91,7 +91,8 @@ class MainActivityIntentTest {
         try {
             val fos = Objects.requireNonNull(imageUri)
                 ?.let { contentResolver?.openOutputStream(it) }
-            Assert.assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos))
+            fos?.let { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                ?.let { Assert.assertTrue(it) }
             assert(fos != null)
             fos?.close()
         } catch (e: IOException) {

@@ -175,7 +175,8 @@ class OpenedFromPocketCodeNewImageTest {
         val imageUri = Uri.fromFile(imageFile)
         try {
             val fos = activity?.contentResolver?.openOutputStream(Objects.requireNonNull(imageUri))
-            Assert.assertTrue(bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos))
+            fos?.let { bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it) }
+                ?.let { Assert.assertTrue(it) }
             assert(fos != null)
             fos?.close()
         } catch (e: IOException) {

@@ -131,8 +131,9 @@ class FileFromOtherSourceIntegrationTest {
             val fos = requireNonNull.let {
                 it?.let { it1 -> resolver?.openOutputStream(it1) }
             }
-            Assert.assertTrue(bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos))
             assert(fos != null)
+            fos?.let { bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it) }
+                ?.let { Assert.assertTrue(it) }
             fos!!.close()
         } catch (e: IOException) {
             throw AssertionError("Picture file could not be created.", e)

@@ -205,7 +205,7 @@ class OpenedFromPocketCodeWithImageTest {
             val fos = activity!!.contentResolver.openOutputStream(
                 Objects.requireNonNull(uncompressedImageUri)
             )
-            assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos))
+            assertTrue(fos?.let { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) } == true)
             assert(fos != null)
             fos!!.close()
         } catch (e: IOException) {

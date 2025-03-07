@@ -47,7 +47,7 @@ task checkstyle(type: Checkstyle) {
     ignoreFailures false
 
     reports {
-        xml.enabled = true
+        xml.required = true
         xml.destination file("build/reports/checkstyle.xml")
     }
 }
@@ -63,8 +63,8 @@ task pmd(type: Pmd) {
     ignoreFailures false
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
         xml.destination file("build/reports/pmd.xml")
     }
 }
