@@ -18,6 +18,7 @@
  */
 package org.catrobat.paintroid.test.espresso.util.wrappers
 
+import android.os.SystemClock
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
@@ -25,9 +26,12 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.catrobat.paintroid.R
-import org.catrobat.paintroid.test.espresso.util.UiMatcher
 import org.catrobat.paintroid.tools.ToolType
 import org.hamcrest.Matchers.allOf
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import org.catrobat.paintroid.test.espresso.util.EspressoUtils
+import org.catrobat.paintroid.test.espresso.util.UiMatcher
 
 class BottomNavigationViewInteraction private constructor() :
     CustomViewInteraction(Espresso.onView(withId(R.id.pocketpaint_bottom_navigation))) {
@@ -51,16 +55,29 @@ class BottomNavigationViewInteraction private constructor() :
             .perform(ViewActions.click())
     }
 
-    fun checkShowsCurrentTool(toolType: ToolType): ViewInteraction {
-        Espresso.onView(
-            allOf(
-                withId(R.id.icon),
-                ViewMatchers.isDescendantOfA(withId(R.id.action_current_tool))
-            )
-        )
-            .check(ViewAssertions.matches(UiMatcher.withDrawable(toolType.drawableResource)))
+    fun checkShowsCurrentTool(toolType: ToolType) {
+        var matcher = allOf(withId(R.id.icon),
+                ViewMatchers.isDescendantOfA(withId(R.id.action_current_tool)),
+                UiMatcher.withDrawable(R.drawable.ic_pocketpaint_tool_brush))
+        var assertion = ViewAssertions.matches(UiMatcher.withDrawable(R.drawable.ic_pocketpaint_tool_brush))
+        EspressoUtils.assertOnView(matcher, assertion)
+
+//        Espresso.onView(allOf(withId(R.id.icon), ViewMatchers.isDescendantOfA(withId(R.id.action_current_tool))))
+//                .check(ViewAssertions.matches(UiMatcher.withDrawable(R.drawable.ic_pocketpaint_tool_brush)))
+
+
+//        matcher = withId(R.id.action_current_tool)
+//        //matcher = allOf(withText(toolType.nameResource), ViewMatchers.isDescendantOfA(withId(R.id.action_current_tool)))
+//        assertion = ViewAssertions.matches(ViewMatchers.hasDescendant(withText(toolType.nameResource)))
+//        EspressoUtils.assertOnView(matcher, assertion)
+    }
+
+    fun asdfcheckShowsCurrentTool(toolType: ToolType): ViewInteraction {
+        Espresso.onView(allOf(withId(R.id.icon), ViewMatchers.isDescendantOfA(withId(R.id.action_current_tool))))
+                .check(ViewAssertions.matches(UiMatcher.withDrawable(toolType.drawableResource)))
+
         return Espresso.onView(withId(R.id.action_current_tool))
-            .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(toolType.nameResource))))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(toolType.nameResource))))
     }
 
     fun onColorClicked(): ViewInteraction {
